@@ -8,19 +8,19 @@ export interface BuildIndexOptions extends IngestOptions, ChunkOptions {}
 
 export async function buildIndex(options: BuildIndexOptions): Promise<CorpusIndex> {
   const rootDir = path.resolve(options.rootDir);
-  const walked = await walkTextFiles({
-    rootDir,
-    includeHidden: options.includeHidden,
-    maxFileBytes: options.maxFileBytes,
-    extensions: options.extensions
-  });
+  const ingestOptions: IngestOptions = { rootDir };
+  if (options.includeHidden !== undefined) ingestOptions.includeHidden = options.includeHidden;
+  if (options.maxFileBytes !== undefined) ingestOptions.maxFileBytes = options.maxFileBytes;
+  if (options.extensions !== undefined) ingestOptions.extensions = options.extensions;
+  const walked = await walkTextFiles(ingestOptions);
   const documents = await Promise.all(walked.files.map((file) => loadDocument(rootDir, file)));
   documents.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
   if (documents.length === 0) throw new EmptyCorpusError(rootDir);
 
-  const chunks = documents.flatMap((document) =>
-    chunkDocument(document, { maxChunkChars: options.maxChunkChars, overlapLines: options.overlapLines })
-  );
+  const chunkOptions: ChunkOptions = {};
+  if (options.maxChunkChars !== undefined) chunkOptions.maxChunkChars = options.maxChunkChars;
+  if (options.overlapLines !== undefined) chunkOptions.overlapLines = options.overlapLines;
+  const chunks = documents.flatMap((document) => chunkDocument(document, chunkOptions));
   const vocabulary = [...new Set(chunks.flatMap((chunk) => chunk.tokens))].sort();
 
   return {

@@ -18,28 +18,27 @@ export function queryIndex(index: CorpusIndex, question: string, top = 5): Query
   const documentById = new Map(index.documents.map((document) => [document.id, document]));
   const documentFrequency = computeDocumentFrequency(index);
   const totalChunks = Math.max(index.chunks.length, 1);
+  const results: QueryResult[] = [];
 
-  const results: QueryResult[] = index.chunks
-    .map((chunk) => {
-      const chunkTerms = new Set(chunk.tokens);
-      const matchedTerms = [...questionSet].filter((term) => chunkTerms.has(term)).sort();
-      const score = matchedTerms.reduce((sum, term) => {
-        const tf = chunk.tokens.filter((token) => token === term).length;
-        const idf = Math.log((1 + totalChunks) / (1 + (documentFrequency.get(term) ?? 0))) + 1;
-        return sum + tf * idf;
-      }, 0);
-      const document = documentById.get(chunk.documentId);
-      if (!document) return undefined;
-      return { chunk, document, score, matchedTerms };
-    })
-    .filter((result): result is QueryResult => Boolean(result) && result.score > 0)
-    .sort((a, b) => b.score - a.score || a.chunk.relativePath.localeCompare(b.chunk.relativePath))
-    .slice(0, Math.max(top, 1));
+  for (const chunk of index.chunks) {
+    const document = documentById.get(chunk.documentId);
+    if (!document) continue;
+    const chunkTerms = new Set(chunk.tokens);
+    const matchedTerms = [...questionSet].filter((term) => chunkTerms.has(term)).sort();
+    const score = matchedTerms.reduce((sum, term) => {
+      const tf = chunk.tokens.filter((token) => token === term).length;
+      const idf = Math.log((1 + totalChunks) / (1 + (documentFrequency.get(term) ?? 0))) + 1;
+      return sum + tf * idf;
+    }, 0);
+    if (score > 0) results.push({ chunk, document, score, matchedTerms });
+  }
+
+  results.sort((a, b) => b.score - a.score || a.chunk.relativePath.localeCompare(b.chunk.relativePath));
 
   return {
     question,
     normalizedQuestion: questionTerms.join(" "),
-    results
+    results: results.slice(0, Math.max(top, 1))
   };
 }
 
