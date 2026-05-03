@@ -4,8 +4,8 @@
 
 ```sh
 npm run build
-node dist/cli.js inspect fixtures/sample --format markdown
-node dist/cli.js query fixtures/sample --question "What safety evidence is required?" --top 3
+node dist/src/cli.js inspect fixtures/sample --format markdown
+node dist/src/cli.js query fixtures/sample --question "What safety evidence is required?" --top 3
 ```
 
 ## Library usage

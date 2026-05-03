@@ -35,7 +35,7 @@ airgapquery --help
 Or run directly from the repo after building:
 
 ```sh
-node dist/cli.js --help
+node dist/src/cli.js --help
 ```
 
 ## Quickstart
@@ -44,19 +44,19 @@ Inspect the included fixture corpus:
 
 ```sh
 npm run build
-node dist/cli.js inspect fixtures/sample --format markdown
+node dist/src/cli.js inspect fixtures/sample --format markdown
 ```
 
 Write a JSON evidence report:
 
 ```sh
-node dist/cli.js inspect fixtures/sample --format json --output out/inspect.json
+node dist/src/cli.js inspect fixtures/sample --format json --output out/inspect.json
 ```
 
 Ask a local-only retrieval question:
 
 ```sh
-node dist/cli.js query fixtures/sample \
+node dist/src/cli.js query fixtures/sample \
   --question "How do agents prove there are no hidden network calls?" \
   --format markdown \
   --top 3
@@ -113,7 +113,7 @@ bash scripts/validate.sh
 A real fixture CLI smoke used during development:
 
 ```sh
-node dist/cli.js query fixtures/sample \
+node dist/src/cli.js query fixtures/sample \
   --question "What safety evidence blocks hidden network calls?" \
   --format json \
   --top 3

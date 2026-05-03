@@ -9,8 +9,8 @@ const env = {
 };
 
 const commands = [
-  ["node", ["dist/cli.js", "inspect", "fixtures/sample", "--format", "json"]],
-  ["node", ["dist/cli.js", "query", "fixtures/sample", "--question", "What safety evidence blocks hidden network calls?", "--format", "json", "--top", "3"]]
+  ["node", ["dist/src/cli.js", "inspect", "fixtures/sample", "--format", "json"]],
+  ["node", ["dist/src/cli.js", "query", "fixtures/sample", "--question", "What safety evidence blocks hidden network calls?", "--format", "json", "--top", "3"]]
 ];
 
 for (const [command, args] of commands) {

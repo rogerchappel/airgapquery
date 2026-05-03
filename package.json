@@ -4,14 +4,14 @@
   "description": "Local-first document inspection and retrieval smoke tests for air-gapped QA workflows.",
   "type": "module",
   "bin": {
-    "airgapquery": "./dist/cli.js"
+    "airgapquery": "./dist/src/cli.js"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
     }
   },
   "files": [
@@ -26,7 +26,7 @@
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
     "lint": "node scripts/lint.mjs",
-    "smoke": "npm run build && node dist/cli.js inspect fixtures/sample --format json --output out/smoke-report.json && node dist/cli.js query fixtures/sample --question \"How do agents prove there are no hidden network calls?\" --format markdown --top 2 && node scripts/no-network-smoke.mjs",
+    "smoke": "npm run build && node dist/src/cli.js inspect fixtures/sample --format json --output out/smoke-report.json && node dist/src/cli.js query fixtures/sample --question \"How do agents prove there are no hidden network calls?\" --format markdown --top 2 && node scripts/no-network-smoke.mjs",
     "test": "npm run build && node --test dist/tests/*.test.js"
   },
   "keywords": [
