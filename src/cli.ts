@@ -21,6 +21,8 @@ Usage:
 
 Options:
   --max-chunk-chars <n>  Maximum characters per searchable chunk (default: 900)
+  --max-file-bytes <n>   Skip files larger than this many bytes (default: 524288)
+  --extensions <list>    Comma-separated extension allow-list (default: md,txt,json,csv,yaml,yml,log)
   --include-hidden       Include dotfiles and hidden directories
   --help                 Show this help
 
@@ -97,16 +99,32 @@ function requireDirectory(parsed: ParsedArgs): string {
 }
 
 function readBuildOptions(parsed: ParsedArgs, rootDir: string) {
-  const maxChunkCharsRaw = readStringFlag(parsed, "max-chunk-chars");
-  const maxChunkChars = maxChunkCharsRaw ? Number(maxChunkCharsRaw) : undefined;
-  if (maxChunkChars !== undefined && (!Number.isInteger(maxChunkChars) || maxChunkChars < 120)) {
-    throw new UserInputError("--max-chunk-chars must be an integer >= 120.");
-  }
+  const maxChunkChars = readPositiveIntegerFlag(parsed, "max-chunk-chars", 120);
+  const maxFileBytes = readPositiveIntegerFlag(parsed, "max-file-bytes", 1);
+  const extensions = readExtensions(parsed);
   return {
     rootDir,
     includeHidden: parsed.flags.get("include-hidden") === true,
-    ...(maxChunkChars ? { maxChunkChars } : {})
+    ...(maxChunkChars ? { maxChunkChars } : {}),
+    ...(maxFileBytes ? { maxFileBytes } : {}),
+    ...(extensions ? { extensions } : {})
   };
+}
+
+function readPositiveIntegerFlag(parsed: ParsedArgs, name: string, minimum: number): number | undefined {
+  const raw = readStringFlag(parsed, name);
+  if (!raw) return undefined;
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value < minimum) throw new UserInputError(`--${name} must be an integer >= ${minimum}.`);
+  return value;
+}
+
+function readExtensions(parsed: ParsedArgs): string[] | undefined {
+  const raw = readStringFlag(parsed, "extensions");
+  if (!raw) return undefined;
+  const extensions = raw.split(",").map((value) => value.trim()).filter(Boolean).map((value) => value.startsWith(".") ? value : `.${value}`);
+  if (extensions.length === 0) throw new UserInputError("--extensions must include at least one extension.");
+  return extensions;
 }
 
 function readFormat(parsed: ParsedArgs, fallback: OutputFormat): OutputFormat {
