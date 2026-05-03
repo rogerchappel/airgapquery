@@ -27,6 +27,19 @@ Feature requests should include:
 - Risks or compatibility concerns.
 - Suggested files or behavior that may need to change.
 
+## Local Development
+
+```sh
+npm install
+npm test
+npm run check
+npm run build
+npm run smoke
+bash scripts/validate.sh
+```
+
+Use `fixtures/sample` for deterministic tests. If you need a new fixture, keep it small, text-only, synthetic, and safe to publish.
+
 ## Pull Requests
 
 Pull requests should:
@@ -38,6 +51,7 @@ Pull requests should:
 - Update documentation when behavior or usage changes.
 - Avoid unrelated formatting or dependency churn.
 - Avoid secrets, private contact details, and project-specific sensitive information.
+- Avoid adding runtime network behavior unless it is opt-in, documented, and explicitly reviewed.
 
 ## Review Pack
 
