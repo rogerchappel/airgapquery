@@ -1,37 +1,36 @@
 # Roadmap
 
 This roadmap describes intended direction, not a binding delivery promise.
-Review it regularly and update it as the project learns from users,
-contributors, and implementation constraints.
 
 ## Now
 
-- Define the smallest useful project scope.
-- Keep repository setup, documentation, and verification easy for contributors
-  to follow.
-- Ship small, reviewable improvements.
+- Keep the deterministic inspect/query MVP small, local-first, and easy to audit.
+- Improve fixture coverage around realistic private-document QA workflows.
+- Gather feedback from developers and agents who need offline retrieval smoke tests.
 
 ## Next
 
-- Add the next capabilities that directly support the project's primary users.
-- Improve tests, docs, and examples around the most used workflows.
-- Reduce setup friction discovered during early use.
+- Add optional redaction helpers for report output.
+- Support saved index files so large local corpora do not need to be rebuilt for each question.
+- Add richer scoring explanations and query diagnostics.
+- Document host-level egress blocking recipes for common development environments.
 
 ## Later
 
-- Consider larger features after the core workflow is stable.
-- Add automation only where it removes repeated maintainer work.
-- Revisit packaging, deployment, or integration options based on real demand.
+- Consider opt-in embedding backends that can run fully offline.
+- Consider vector-store adapters only when they are explicitly configured and testable without egress.
+- Explore package release automation after the API stabilizes.
 
-## Not Planned
+## Not Planned for V1
 
-- Unrelated platform rewrites without a clear migration path.
-- Mandatory dependencies on a single ecosystem unless the project requires it.
-- Public release dates before maintainers are ready to commit to them.
+- Hidden network calls, telemetry, or remote model APIs.
+- Credential discovery or broad home-directory crawling.
+- A full RAG platform replacement.
+- Claims that the tool alone proves an environment is air-gapped.
 
 ## Roadmap Review
 
-Before each major or meaningful minor release:
+Before each meaningful release:
 
 - Move completed user-visible work into `CHANGELOG.md`.
 - Remove stale commitments.
