@@ -1,5 +1,5 @@
 const STOP_WORDS = new Set([
-  "a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "from", "has", "have", "how", "i", "if", "in", "into", "is", "it", "its", "no", "not", "of", "on", "or", "our", "that", "the", "their", "there", "this", "to", "we", "what", "when", "where", "which", "who", "why", "with", "you", "your"
+  "a", "an", "and", "are", "as", "at", "be", "but", "by", "do", "for", "from", "has", "have", "how", "i", "if", "in", "into", "is", "it", "its", "no", "not", "of", "on", "or", "our", "that", "the", "their", "there", "this", "to", "we", "what", "when", "where", "which", "who", "why", "with", "you", "your"
 ]);
 
 export function normalizeText(input: string): string {
