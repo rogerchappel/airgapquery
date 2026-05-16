@@ -35,6 +35,7 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
     process.stdout.write(HELP);
     return;
   }
+  validateFlags(parsed);
 
   switch (parsed.command) {
     case "inspect":
@@ -69,6 +70,23 @@ function parseArgs(argv: string[]): ParsedArgs {
   }
 
   return { command: positional.shift() ?? (flags.has("help") ? "help" : ""), positional, flags };
+}
+
+function validateFlags(parsed: ParsedArgs): void {
+  const commonValueFlags = new Set(["format", "output", "max-chunk-chars", "max-file-bytes", "extensions"]);
+  const commandValueFlags = parsed.command === "query" ? new Set(["question", "top"]) : new Set<string>();
+  const booleanFlags = new Set(["include-hidden", "help"]);
+  const allowed = new Set([...commonValueFlags, ...commandValueFlags, ...booleanFlags]);
+
+  for (const [name, value] of parsed.flags.entries()) {
+    if (!allowed.has(name)) throw new UserInputError(`Unknown option: --${name}. Run airgapquery --help.`);
+    if ((commonValueFlags.has(name) || commandValueFlags.has(name)) && typeof value !== "string") {
+      throw new UserInputError(`--${name} requires a value.`);
+    }
+    if (booleanFlags.has(name) && typeof value === "string") {
+      throw new UserInputError(`--${name} does not accept a value.`);
+    }
+  }
 }
 
 async function runInspect(parsed: ParsedArgs): Promise<void> {
