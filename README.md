@@ -134,3 +134,13 @@ See [SECURITY.md](SECURITY.md). Please do not post sensitive corpus examples or 
 ## License
 
 MIT
+
+## Development
+
+Run the same local checks used for release readiness before opening changes:
+
+- `npm run check`
+- `npm test`
+- `npm run build`
+- `npm run smoke`
+- `npm run release:check`
