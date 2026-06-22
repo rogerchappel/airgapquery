@@ -64,6 +64,17 @@ node dist/src/cli.js query fixtures/sample \
 
 Example output includes the cited file path, line range, matched terms, score, and chunk excerpt.
 
+For a reusable cited-query demo:
+
+```sh
+npm run build
+bash examples/cited-query-demo.sh
+```
+
+The script writes a JSON inspection report, writes a Markdown answer for the
+sample corpus, and checks that the cited local fixture files appear in the
+answer.
+
 ## CLI
 
 ```text

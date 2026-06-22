@@ -6,6 +6,8 @@ This directory holds project documentation.
 
 - [CLI reference](CLI.md)
 - [Safety model](SAFETY.md)
+- [Cited local query tutorial](tutorials/cited-local-query.md)
+- [Social hooks](promo/social-hooks.md)
 - [Product requirements](PRD.md)
 - [Contributing guide](../CONTRIBUTING.md)
 - [Security policy](../SECURITY.md)
