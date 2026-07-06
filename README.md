@@ -75,6 +75,11 @@ The script writes a JSON inspection report, writes a Markdown answer for the
 sample corpus, and checks that the cited local fixture files appear in the
 answer.
 
+For a step-by-step walkthrough, see
+[`docs/tutorials/cited-query-demo.md`](docs/tutorials/cited-query-demo.md).
+For a short video outline grounded in the fixture demo, see
+[`docs/promo/video-brief.md`](docs/promo/video-brief.md).
+
 ## CLI
 
 ```text
