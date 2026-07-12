@@ -29,7 +29,7 @@
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
     "lint": "node scripts/lint.mjs",
-    "smoke": "npm run build && node dist/src/cli.js inspect fixtures/sample --format json --output out/smoke-report.json && node dist/src/cli.js query fixtures/sample --question \"How do agents prove there are no hidden network calls?\" --format markdown --top 2 && node scripts/no-network-smoke.mjs",
+    "smoke": "npm run build && node dist/src/cli.js --help && node dist/src/cli.js --version && node dist/src/cli.js inspect fixtures/sample --format json --output out/smoke-report.json && node dist/src/cli.js query fixtures/sample --question \"How do agents prove there are no hidden network calls?\" --format markdown --top 2 && node scripts/no-network-smoke.mjs",
     "test": "npm run build && node --test dist/tests/*.test.js",
     "package:smoke": "npm run build && node scripts/package-smoke.mjs",
     "release:check": "npm run lint && npm run check && npm test && npm run smoke && npm run package:smoke"
