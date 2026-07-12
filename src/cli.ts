@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { UserInputError } from "./errors.js";
 import { buildIndex, summarizeIndex } from "./inspect.js";
@@ -24,15 +24,27 @@ Options:
   --max-file-bytes <n>   Skip files larger than this many bytes (default: 524288)
   --extensions <list>    Comma-separated extension allow-list (default: md,txt,json,csv,yaml,yml,log)
   --include-hidden       Include dotfiles and hidden directories
+  --version              Show package version
   --help                 Show this help
 
 Safety: airgapquery reads only local files under the directory you pass. The MVP has no runtime network calls, telemetry, model APIs, or credential discovery.
 `;
 
+async function packageVersion(): Promise<string> {
+  const packageJson = JSON.parse(await readFile(new URL("../../package.json", import.meta.url), "utf8")) as {
+    version?: string;
+  };
+  return packageJson.version ?? "0.0.0";
+}
+
 export async function main(argv = process.argv.slice(2)): Promise<void> {
   const parsed = parseArgs(argv);
   if (parsed.command === "help" || parsed.flags.has("help")) {
     process.stdout.write(HELP);
+    return;
+  }
+  if (parsed.flags.has("version")) {
+    process.stdout.write(`${await packageVersion()}\n`);
     return;
   }
   validateFlags(parsed);
@@ -75,7 +87,7 @@ function parseArgs(argv: string[]): ParsedArgs {
 function validateFlags(parsed: ParsedArgs): void {
   const commonValueFlags = new Set(["format", "output", "max-chunk-chars", "max-file-bytes", "extensions"]);
   const commandValueFlags = parsed.command === "query" ? new Set(["question", "top"]) : new Set<string>();
-  const booleanFlags = new Set(["include-hidden", "help"]);
+  const booleanFlags = new Set(["include-hidden", "help", "version"]);
   const allowed = new Set([...commonValueFlags, ...commandValueFlags, ...booleanFlags]);
 
   for (const [name, value] of parsed.flags.entries()) {
